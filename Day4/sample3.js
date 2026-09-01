@@ -1,0 +1,1 @@
+document.getElementsByClassName("greeting")[0].innerHTML = "Hello, World!";

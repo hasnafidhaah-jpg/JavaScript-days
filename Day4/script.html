@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day 4</title>
+</head>
+<body>
+  <h1 id="name"></h1>
+  <p id="course"></p>
+  <button id="btn">Click Me</button>
+
+  <script>
+
+    let student = {
+      name:"John Doe",
+      course:"Web Development"  
+    };
+
+    document.getElementById("name").innerText = student.name;
+    document.getElementById("course").innerText = student.course;
+
+    document.getElementById("name").innerText = "Hi Hasna!";
+
+    document.getElementById("name").style.color = "blue";
+
+    
+    document.getElementById("btn").onclick = function changeColor(){
+      document.getElementById("course").style.backgroundColor = "yellow";
+
+    }
+  </script>
+</body>
+</html>
