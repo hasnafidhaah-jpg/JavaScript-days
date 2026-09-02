@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Stringify and Parse</title>
+</head>
+<body>
+  
+  <button onclick="saveArray()">1. Save Array</button>
+  <button onclick="showArray()">2. Show Array</button>
+
+  <h2 id="result"></h2>
+
+  <script>
+
+    let myList = ["apple", "banana", "cherry", "date", "elderberry"];
+
+    function saveArray(){
+      let str = JSON.stringify(myList);
+      localStorage.setItem("myList", str);
+      alert("Saved as String"+ str);
+    }
+
+    function showArray(){
+      let str = localStorage.getItem("myList");
+      let arr = JSON.parse(str);
+
+      document.querySelector("#result").textContent = arr[0] + ", " + arr[1];
+    }
+  </script>
+</body>
+</html>

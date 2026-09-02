@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Day5 Events Test</title>
+</head>
+<body>
+  <h2>1. Click Event</h2>
+  <button id="clickBtn">Click Me</button>
+  <p id="clickmsg"></p>
+
+  <hr>
+  <h2>2. Input Event</h2>
+  <input type="text" id="nameInput" placeholder="Type something...">
+  <p id="liveText">You typed:</p>
+  <hr>
+
+  <h2>3. Submit & Prevent Default</h2>
+  <form id="myForm">
+    <input type="text" id="formInput" placeholder="Enter task">
+    <button type="submit">Submit</button>
+  </form>
+  <p id="formmsg"></p>
+
+  <script>
+    //1. Click Event
+
+    let btn = document.getElementById("clickBtn");
+    let clickmsg = document.getElementById("clickmsg");
+
+    btn.addEventListener("click",()=>{
+      clickmsg.textContent = "Button Clicked!";
+    });
+
+    //2. Input Event
+    let nameInput = document.getElementById("nameInput");
+    let liveText = document.getElementById("liveText");
+
+    nameInput.addEventListener("input",()=>{
+      liveText.textContent = "You typed: " + nameInput.value;
+    });
+
+    //3. Submit & Prevent Default
+    let form = document.getElementById("myForm");
+    let formInput = document.getElementById("formInput");
+    let formmsg = document.getElementById("formmsg");
+
+    form.addEventListener("submit",(e)=>{
+      e.preventDefault();
+      alert("Form Submitted: " + formInput.value);
+    });
+  </script>
+</body>
+</html>

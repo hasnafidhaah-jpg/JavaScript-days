@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Storage</title>
+</head>
+<body>
+  <input type="text" id="name" placeholder="name">
+  <button onclick="save()">Save</button>
+  <button onclick="show()">Show</button>
+  <button onclick="del()">Delete One</button>
+  <button onclick="clearAll()">Clear All</button>
+
+  <h2 id="result"></h2>
+  <script>
+    //1. SaveItem - Save
+    function save(){
+      let val = document.querySelector("#name").value;
+      localStorage.setItem("name", val);
+      alert("Saved: " + val);
+    }
+
+    //2. getItem - Show
+    function show(){
+      let data = localStorage.getItem("name");
+      document.querySelector("#result").textContent = data || "No data found";
+    }
+
+    //3. removeItem - Delete One
+    function del(){
+      localStorage.removeItem("name");
+      document.querySelector("#result").textContent = "Deleted!";
+      alert("name deleted");
+    }
+
+    //4. clear - Clear All
+    function clearAll(){
+      localStorage.clear();
+      document.querySelector("#result").textContent = "";
+      alert("All data cleared");
+    }
+  </script>
+</body>
+</html>
