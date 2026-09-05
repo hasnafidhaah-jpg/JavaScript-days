@@ -14,27 +14,24 @@
 
   <h2 id="result"></h2>
   <script>
-    //1. SaveItem - Save
+
     function save(){
       let val = document.querySelector("#name").value;
       localStorage.setItem("name", val);
       alert("Saved: " + val);
     }
 
-    //2. getItem - Show
     function show(){
       let data = localStorage.getItem("name");
       document.querySelector("#result").textContent = data || "No data found";
     }
 
-    //3. removeItem - Delete One
     function del(){
       localStorage.removeItem("name");
       document.querySelector("#result").textContent = "Deleted!";
       alert("name deleted");
     }
 
-    //4. clear - Clear All
     function clearAll(){
       localStorage.clear();
       document.querySelector("#result").textContent = "";
