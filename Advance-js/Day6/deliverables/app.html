@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head><title>My App</title></head>
+<body>
+<h2>My Fav List</h2>
+
+<input id="search" placeholder="Search..." oninput="show()">
+<br><br>
+<input id="box" placeholder="Add item">
+<button onclick="add()">Add</button>
+
+<div id="list"></div>
+
+<script>
+let items = ["Kochi", "Munnar", "Alappuzha"]; // title list
+
+function add() {
+  let value = document.getElementById('box').value;
+  if(value=="") return;
+  items.push(value);
+  document.getElementById('box').value = "";
+  show(); 
+}
+
+function show() {
+  let search = document.getElementById('search').value.toLowerCase();
+  
+  // FILTER - search topic
+  let filtered = items.filter(name => name.toLowerCase().includes(search));
+  
+  // MAP - display topic
+  document.getElementById('list').innerHTML = filtered.map(name => `<p>- ${name}</p>`).join('');
+}
+
+show(); // first run
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search</title>
+</head>
+<body>
+  
+  <input id="search" placeholder="Search movie..." />
+<button onclick="searchMovie(document.getElementById('search').value)">Search</button>
+<div id="status"></div>
+<div id="movies"></div>
+
+<script type="module">
+  import { getData } from './api.js'
+  let isLoading = true;
+  
+  async function show(q) {
+    document.getElementById('status').innerText = "Loading...";
+    try {
+      const movies = await getData(q);
+      document.getElementById('status').innerText = "";
+      document.getElementById('movies').innerHTML = movies.map(m => `<p>${m.Title} - ${m.Year}</p>`).join('');
+    } catch (e) {
+      document.getElementById('status').innerText = "Error: " + e.message;
+    }
+  }
+  show("batman");
+  window.searchMovie = show;
+</script>
+
+
+</body>
+</html>

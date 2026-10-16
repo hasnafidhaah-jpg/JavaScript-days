@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head><title>Products</title></head>
+<body>
+  <input id="search" placeholder="Search product..." oninput="render()" />
+  <select id="filter" onchange="render()">
+    <option value="all">All</option>
+    <option value="cheap">Price < $50 (filtering)</option>
+    <option value="costly">Price > $50</option>
+  </select>
+  <div id="status"></div>
+  <div id="list"></div>
+
+<script>
+// api.js part
+async function getProducts() {
+  const res = await fetch('https://fakestoreapi.com/products');
+  if(!res.ok) throw new Error("Failed to fetch");
+  return res.json();
+}
+
+// states.js part
+let state = { isLoading: true, isError: false, data: [] }
+
+async function init() {
+  const status = document.getElementById('status');
+  try {
+    status.innerText = "Loading..."; // loading state
+    const data = await getProducts();
+    state.isLoading = false; state.data = data;
+    status.innerText = "";
+    render();
+  } catch(err) {
+    state.isError = true;
+    status.innerText = "Error: " + err.message; // error state
+  }
+}
+
+// search + filtering + modular render
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const f = document.getElementById('filter').value;
+  
+  let filtered = state.data.filter(p => 
+    p.title.toLowerCase().includes(q) // search
+  );
+  
+  if(f === "cheap") filtered = filtered.filter(p => p.price < 50); // filtering
+  if(f === "costly") filtered = filtered.filter(p => p.price > 50);
+
+  document.getElementById('list').innerHTML = filtered.map(p => 
+    `<div><b>${p.title.slice(0,30)}</b> - $${p.price}</div>`
+  ).join('');
+}
+
+init();
+</script>
+</body>
+</html>

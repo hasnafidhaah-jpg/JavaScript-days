@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Notes App</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+    input { padding: 8px; width: 70%; }
+    button { padding: 8px; }
+    .card { border: 1px solid #ccc; padding: 10px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>My Notes App - Day6 Project</h2>
+  <input id="searchBox" placeholder="Search notes..." oninput="render()">
+  <br><br>
+  <input id="noteInput" placeholder="New note ezhuthu...">
+  <button onclick="addNote()">Add</button>
+  
+  <div id="status"></div>
+  <div id="list"></div>
+
+<script>
+// --- STATE (real-world UI state) ---
+let state = {
+  isLoading: false, // loading state
+  notes: ["JS study", "Day6 project completed"] // array topic
+};
+
+// --- ADD (array + application flow) ---
+function addNote() {
+  const input = document.getElementById('noteInput');
+  if(input.value === "") return; // empty check
+  
+  state.notes.push(input.value); // array push
+  input.value = ""; // clear input
+  render(); // UI update - state synchronization
+}
+
+// --- RENDER (modular architecture + filtering + search) ---
+function render() {
+  const listDiv = document.getElementById('list');
+  const search = document.getElementById('searchBox').value.toLowerCase();
+
+  // 1. SEARCH + FILTERING - Combine arrays topic
+  let filtered = state.notes.filter(note => 
+    note.toLowerCase().includes(search) // search logic
+  );
+
+  // 2. Empty state check
+  if(filtered.length === 0) {
+    listDiv.innerHTML = "<p>No notes found (empty state)</p>";
+    return;
+  }
+
+  // 3. Map + Render - application flow
+  listDiv.innerHTML = filtered.map((note, index) => `
+    <div class="card">
+      ${note}
+      <button onclick="deleteNote(${index})" style="float:right">X</button>
+    </div>
+  `).join('');
+}
+
+// --- DELETE (performance cleanup) ---
+function deleteNote(index) {
+  state.notes.splice(index, 1); // array splice
+  render();
+}
+
+// --- INITIAL RUN ---
+render();
+</script>
+</body>
+</html>

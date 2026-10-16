@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Search App</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, button { padding: 8px; }
+    .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; display: flex; gap: 10px; }
+    img { width: 60px; height: 80px; object-fit: cover; }
+  </style>
+</head>
+<body>
+  <h2>Movie Search App</h2>
+  <input id="search" placeholder="Search movie - ex: batman, avengers" value="batman"/>
+  <button onclick="searchMovie()">Search</button>
+  
+  <select id="filter" onchange="render()">
+    <option value="all">All Years (no filter)</option>
+    <option value="new">Year > 2015 (filtering)</option>
+    <option value="old">Year < 2010</option>
+  </select>
+
+  <div id="status"></div>
+  <div id="list"></div>
+
+<script>
+// 1. api.js - API fetch (Free, no key needed)
+async function getData(search) {
+  // Fake movie api with real data - works without key
+  const res = await fetch(`https://api.tvmaze.com/search/shows?q=${search}`);
+  if(!res.ok) throw new Error("Fetch failed");
+  const json = await res.json();
+  // Convert to simple format
+  return json.map(item => ({
+    Title: item.show.name,
+    Year: item.show.premiered ? item.show.premiered.slice(0,4) : "2020",
+    Poster: item.show.image ? item.show.image.medium : "https://via.placeholder.com/60x80",
+    Type: item.show.type
+  }));
+}
+
+// 2. states.js - loading, error, data, search
+let state = {
+  isLoading: false,
+  isError: false,
+  data: [],
+  search: "batman"
+}
+
+// 3. Search function - deliverable
+async function searchMovie() {
+  const status = document.getElementById('status');
+  const searchInput = document.getElementById('search').value || "batman";
+  state.search = searchInput;
+
+  try {
+    state.isLoading = true;
+    state.isError = false;
+    status.innerText = "Loading..."; // loading state
+
+    const movies = await getData(state.search);
+    
+    if(movies.length === 0) throw new Error("No movies found");
+
+    state.isLoading = false;
+    state.data = movies;
+    status.innerText = ""; // clear loading
+    render();
+
+  } catch (err) {
+    state.isLoading = false;
+    state.isError = true;
+    status.innerText = "Error: " + err.message; // error state
+    document.getElementById('list').innerHTML = "";
+  }
+}
+
+// 4. Filtering + render - modular file concept
+function render() {
+  const filter = document.getElementById('filter').value;
+  let filtered = [...state.data];
+
+  if(filter === "new") {
+    filtered = filtered.filter(m => parseInt(m.Year) > 2015);
+  }
+  if(filter === "old") {
+    filtered = filtered.filter(m => parseInt(m.Year) < 2010);
+  }
+
+  if(filtered.length === 0) {
+    document.getElementById('list').innerHTML = "<p>No results after filtering (isEmpty state)</p>";
+    return;
+  }
+
+  document.getElementById('list').innerHTML = filtered.map(m => `
+    <div class="card">
+      <img src="${m.Poster}" />
+      <div>
+        <b>${m.Title}</b><br/>
+        Year: ${m.Year}<br/>
+        Type: ${m.Type}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Initial load
+searchMovie();
+</script>
+</body>
+</html>
